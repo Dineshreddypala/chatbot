@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Main Section</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* Main Section */
+.main-section {
+    height: 100vh;
+    background: linear-gradient(to right, #2193b0, #6dd5ed);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.content {
+    text-align: center;
+    color: white;
+    padding: 20px;
+}
+
+.content h1 {
+    font-size: 45px;
+    margin-bottom: 15px;
+}
+
+.content p {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+/* Buttons */
+.btn {
+    padding: 12px 20px;
+    border: none;
+    background: white;
+    color: #2193b0;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 5px;
+}
+
+.btn:hover {
+    background: #f1f1f1;
+}
+
+/* Responsive */
+@media(max-width: 768px) {
+    .content h1 {
+        font-size: 32px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Main / Hero Section -->
+<section class="main-section">
+    <div class="content">
+        <h1>Welcome To My Website</h1>
+        <p>Build modern websites using HTML, CSS & JavaScript</p>
+        <button class="btn" onclick="showMessage()">Get Started</button>
+        <button class="btn">Learn More</button>
+    </div>
+</section>
+
+<script>
+function showMessage() {
+    alert("Welcome! Let's start learning Web Development 🚀");
+}
+</script>
+
+</body>
+</html>
