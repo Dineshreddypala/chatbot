@@ -2,42 +2,268 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Simple Webpage</title>
-
-    <!-- CSS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatBot</title>
     <style>
-        body {
-            background-color: #f2f2f2;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
             font-family: Arial, sans-serif;
         }
 
-        .container {
-            background-color: white;
-            width: 300px;
-            padding: 20px;
-            margin: 100px auto;
-            text-align: center;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgb(179, 22, 22);
+        body {
+            background: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
 
-        button {
-            padding: 10px 15px;
-            border: none;
-            background-color: #4CAF50;
+        .chat-container {
+            width: 420px;
+            max-width: 95%;
+            height: 600px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.15);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-header {
+            background: #4CAF50;
             color: white;
-            cursor: pointer;
-            border-radius: 5px;
+            padding: 18px 20px;
+            text-align: center;
         }
 
-        button:hover {
-            background-color: #45a049;
+        .chat-header h1 {
+            font-size: 20px;
+        }
+
+        .chat-header p {
+            font-size: 13px;
+            opacity: 0.85;
+            margin-top: 4px;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 16px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background: #f9fafb;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 10px 14px;
+            border-radius: 16px;
+            font-size: 14px;
+            line-height: 1.5;
+            word-wrap: break-word;
+        }
+
+        .message.bot {
+            background: #e8e8e8;
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+
+        .message.user {
+            background: #4CAF50;
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+
+        .chat-input-area {
+            display: flex;
+            padding: 12px 16px;
+            border-top: 1px solid #e0e0e0;
+            background: white;
+            gap: 8px;
+        }
+
+        .chat-input-area input {
+            flex: 1;
+            padding: 10px 14px;
+            border: 1px solid #ddd;
+            border-radius: 24px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .chat-input-area input:focus {
+            border-color: #4CAF50;
+        }
+
+        .chat-input-area button {
+            padding: 10px 18px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 24px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .chat-input-area button:hover {
+            background: #45a049;
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            padding: 8px 16px;
+            background: #f5f5f5;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .nav-links a {
+            color: #4CAF50;
+            text-decoration: none;
+            font-size: 13px;
+        }
+
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+
+        .typing-indicator {
+            align-self: flex-start;
+            display: none;
+            background: #e8e8e8;
+            padding: 10px 14px;
+            border-radius: 16px;
+            border-bottom-left-radius: 4px;
+        }
+
+        .typing-indicator span {
+            display: inline-block;
+            width: 7px;
+            height: 7px;
+            background: #888;
+            border-radius: 50%;
+            margin: 0 2px;
+            animation: typing 1.2s infinite;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% { opacity: 0.3; transform: translateY(0); }
+            30% { opacity: 1; transform: translateY(-4px); }
         }
     </style>
 </head>
-
 <body>
 
-    <div class="container">
-        <h1>Welcome to My portfolio called dinesh reddy</h1>
-        <p id="text">Click the button to change this text.</p>
+<div class="chat-container">
+    <div class="chat-header">
+        <h1>ChatBot</h1>
+        <p>Hi! I'm a simple chatbot. Ask me anything!</p>
+    </div>
+
+    <div class="chat-messages" id="chatMessages">
+        <div class="message bot">Hello! I'm ChatBot. Ask me about my projects, or just say hi!</div>
+    </div>
+
+    <div class="typing-indicator" id="typingIndicator">
+        <span></span><span></span><span></span>
+    </div>
+
+    <div class="chat-input-area">
+        <input type="text" id="userInput" placeholder="Type a message..." autofocus>
+        <button onclick="sendMessage()">Send</button>
+    </div>
+
+    <div class="nav-links">
+        <a href="home.html">Counter App</a>
+        <a href="headder.html">Header Demo</a>
+        <a href="master.html">Hero Section</a>
+    </div>
+</div>
+
+<script>
+    const responses = {
+        "hello": "Hi there! How can I help you today?",
+        "hi": "Hey! What's on your mind?",
+        "hey": "Hey! What's on your mind?",
+        "how are you": "I'm just code, but I'm running fine! How about you?",
+        "what is your name": "I'm ChatBot, your friendly AI assistant!",
+        "who are you": "I'm ChatBot — a simple chatbot built with HTML, CSS, and JavaScript.",
+        "what can you do": "I can chat with you! Try asking about the projects in this site, or just say hello.",
+        "projects": "This site has a Counter App, a Header Demo, and a Hero Section. Check the links below!",
+        "counter": "The Counter App lets you increase, decrease, and reset a count. Try it from the link below!",
+        "help": "Type a message and I'll do my best to respond. Try saying 'hello', 'projects', or 'what can you do'.",
+        "bye": "Goodbye! Come back anytime!",
+        "goodbye": "Goodbye! Come back anytime!",
+        "thanks": "You're welcome! Happy to help.",
+        "thank you": "You're welcome! Happy to help.",
+        "default": "That's interesting! I'm still learning, but you can ask me about the projects on this site or just say hi.",
+    };
+
+    function addMessage(text, sender) {
+        const messages = document.getElementById("chatMessages");
+        const div = document.createElement("div");
+        div.className = "message " + sender;
+        div.textContent = text;
+        messages.appendChild(div);
+        messages.scrollTop = messages.scrollHeight;
+    }
+
+    function showTyping(show) {
+        document.getElementById("typingIndicator").style.display = show ? "flex" : "none";
+    }
+
+    function getBotResponse(input) {
+        const msg = input.toLowerCase().trim();
+
+        for (const key in responses) {
+            if (msg.includes(key)) {
+                return responses[key];
+            }
+        }
+
+        return responses["default"];
+    }
+
+    function sendMessage() {
+        const input = document.getElementById("userInput");
+        const text = input.value.trim();
+        if (!text) return;
+
+        addMessage(text, "user");
+        input.value = "";
+
+        showTyping(true);
+
+        setTimeout(() => {
+            showTyping(false);
+            const reply = getBotResponse(text);
+            addMessage(reply, "bot");
+        }, 600 + Math.random() * 800);
+    }
+
+    document.getElementById("userInput").addEventListener("keypress", function(e) {
+        if (e.key === "Enter") {
+            sendMessage();
+        }
+    });
+</script>
+
+</body>
+</html>
